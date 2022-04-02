@@ -1,18 +1,42 @@
+#importujem kniznice
 import pygame
+import time
+import sys
+
+#init :)
 pygame.init()
 
-# otvorenie okna
-size = (700, 500)
-screen = pygame.display.set_mode(size)
-pygame.display.set_caption("My First Game")
+from pygame.locals import (
+    MOUSEBUTTONUP,
+    K_ESCAPE,
+    KEYDOWN,
+    QUIT,
+)
 
-# wuhu farbicky
+
+# wuhu farbicky a nastavovacky
 BLACK = ( 0, 0, 0)
 WHITE = ( 255, 255, 255)
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 800
+
+# otvorenie okna
+size = (SCREEN_WIDTH, SCREEN_HEIGHT)
+screen = pygame.display.set_mode(size)
+pygame.display.set_caption("sach")
+
+#matematika pre kooridnacie
 
 
+
+
+
+#kreslenie boardu
+
+
+
+# main loop
 while True:
-    screen.fill(0,0,0)
-
+ 
 
 pygame.quit()
