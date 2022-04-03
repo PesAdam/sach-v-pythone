@@ -3,7 +3,7 @@
 import pygame as p
 import ChessEngine
 
-
+p.init()
 WIDTH = HEIGHT = 512            # velkost okna
 DIMENSION = 8                   # velkost hracieho pola
 SQ_SIZE = HEIGHT // DIMENSION   # velkost jednej pozicie
@@ -12,19 +12,18 @@ IMAGES = {}                     # pre ukladanie obrazkov
 
 
 #nacitavanie obrazkov, toto bude v maine
-
-
 def load_images():
-    pieces = ['wp, wN, wB, wR, wQ, wK, bp, bN, bB, bR, bQ, bK']
+    pieces = ['wp', 'wN', 'wB', 'wR', 'wQ', 'wK', 'bp', 'bN', 'bB', 'bR', 'bQ', 'bK']
     for piece in pieces:
-        IMAGES[piece] = p.transform.scale(p.image.load('./img/'+ piece +'.png'), (SQ_SIZE, SQ_SIZE))
+        print(piece)
+        IMAGES[piece] = p.transform.scale(p.image.load("img/" + piece + ".png"), (SQ_SIZE, SQ_SIZE))
     #transform sluzi nato aby obrazok vzdy vyzeral dobre
     # mame pristup k obrazkom, vieme sa k nim dostat cez 'IMAGES['wp']'
 
 
 #main kusok kodu, bude sa zaoberat user inputom a updatovanim hry
 def main():
-    p.init()
+    
     screen = p.display.set_mode((WIDTH, HEIGHT))
     clock = p.time.Clock()
     screen.fill(p.Color("white"))
@@ -57,9 +56,11 @@ def drawBoard(screen):
 
 # nakreslime figurky pomocou aktualne gamestate.board
 def drawPieces(screen, board):
-    pass
-
-
+    for row in range(DIMENSION):                #pre kazdy riadok
+        for col in range(DIMENSION):            #pre kazdy stlpec
+            piece = board[row][col]             #zoberieme figurku
+            if piece != "--":                   #ak neni prazdno
+                screen.blit(IMAGES[piece], p.Rect(col * SQ_SIZE, row * SQ_SIZE, SQ_SIZE, SQ_SIZE)) #nakreslime ju
     
 if __name__ == "__main__":
     main()
