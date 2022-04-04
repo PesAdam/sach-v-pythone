@@ -42,7 +42,6 @@ def main():
 
 def draw_game_state(screen, gs):
     drawBoard(screen)               #nakreslime hraciu plochu
-    
     drawPieces(screen, gs.board)    #nakreslime figurky
 
 
@@ -56,11 +55,12 @@ def drawBoard(screen):
 
 # nakreslime figurky pomocou aktualne gamestate.board
 def drawPieces(screen, board):
-    for row in range(DIMENSION):                #pre kazdy riadok
-        for col in range(DIMENSION):            #pre kazdy stlpec
-            piece = board[row][col]             #zoberieme figurku
-            if piece != "--":                   #ak neni prazdno
-                screen.blit(IMAGES[piece], p.Rect(col * SQ_SIZE, row * SQ_SIZE, SQ_SIZE, SQ_SIZE)) #nakreslime ju
-    
+    for r in range(DIMENSION):                                                                  #pre kazdy riadok   
+        for c in range(DIMENSION):                                                              #pre kazdy stlpec 
+            piece = board[r][c]
+            if piece != "--":                                                                   #ak je tam nejaka figurka
+                screen.blit(IMAGES[piece], p.Rect(c * SQ_SIZE, r * SQ_SIZE, SQ_SIZE, SQ_SIZE))  #vykreslime ju
+
+
 if __name__ == "__main__":
     main()

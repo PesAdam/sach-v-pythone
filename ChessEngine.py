@@ -8,14 +8,14 @@ class GameState():
         #druhy charakter prezentuje o aku figurku ide
         # "--" reprezentuje prazdnu poziciu
         self.board = [
-            ["br","bn","bb","bq","bk","bb","bn","br"],
+            ["bR","bN","bB","bQ","bK","bB","bN","bR"],
             ["bp","bp","bp","bp","bp","bp","bp","bp"],
             ["--","--","--","--","--","--","--","--"],
             ["--","--","--","--","--","--","--","--"],
             ["--","--","--","--","--","--","--","--"],
             ["--","--","--","--","--","--","--","--"],
             ["wp","wp","wp","wp","wp","wp","wp","wp"],
-            ["wr","wn","wb","wq","wk","wb","wn","wr"]
+            ["wR","wN","wB","wQ","wK","wB","wN","wR"]
         ]
 
         self.whiteToMove = True
