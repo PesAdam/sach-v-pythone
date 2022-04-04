@@ -30,10 +30,26 @@ def main():
     gs = ChessEngine.GameState() #vytvorime instanciu hry, gs = game state
     load_images()               #nacitame obrzky, robime to iba raz!!!
     running = True              #bezime? bezime!
+    sqSelected =  ()            #toto je tuple, kde bude ukladat poziciu kliknutia, od zaiatku je pozicia prazdna,
+                                # (tuple(row,col))
+    playerClicks = []           # tu bude ukladat kliknutia, ktore bude hrac zadavat 
     while running:                  #ak bezi tak sa pozre ci nahodou neni niekde beziaci pygame event
         for e in p.event.get():     #ak je niekde event, tak ho vypne
             if e.type == p.QUIT:    #ak je to quit event, tak sa ukonci
                 running = False     
+            elif e.type == p.MOUSEBUTTONDOWN:
+                location = p.mouse.get_pos()  #ziskaj x,y poziciu mysi
+                row = location[1] // SQ_SIZE     #zistime ktory riadok
+                col = location[0] // SQ_SIZE     #zistime ktory stlpec
+                if sqSelected == (row, col):    #ak je kliknutie na rovnaku poziciu, tak sa odstrani zoznam
+                    sqSelected = ()
+                    playerClicks = []
+                else:
+                    sqSelected = (row, col)         #zapiseme do tuple
+                    playerClicks.append(sqSelected) #zapiseme do zoznamu
+                if len(playerClicks) == 2:          #po druhom kliku
+
+
         draw_game_state(screen, gs) #vykreslime stav hry
         clock.tick(MAX_FPS)         #nastavime fps
         p.display.flip()            #vykresli hru 
