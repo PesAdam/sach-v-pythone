@@ -28,7 +28,7 @@ def main():
     clock = p.time.Clock()
     screen.fill(p.Color("white"))
     gs = ChessEngine.GameState() #vytvorime instanciu hry, gs = game state
-    load_images()               #nacitame obrzky, robime to iba raz!!!
+    load_images()               #nacitame obrzky, robime to iba raz!!!  
     running = True              #bezime? bezime!
     sqSelected =  ()            #toto je tuple, kde bude ukladat poziciu kliknutia, od zaiatku je pozicia prazdna,
                                 # (tuple(row,col))
@@ -48,6 +48,11 @@ def main():
                     sqSelected = (row, col)         #zapiseme do tuple
                     playerClicks.append(sqSelected) #zapiseme do zoznamu
                 if len(playerClicks) == 2:          #po druhom kliku
+                    move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board) #bere si prvu poziciu, poslednu a board
+                    print(move.getChessNotation())
+                    gs.makeMove(move)
+                    sqSelected = ()     #reset uzivateloveho kliku
+                    playerClicks = []
 
 
         draw_game_state(screen, gs) #vykreslime stav hry
