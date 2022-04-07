@@ -36,7 +36,8 @@ def main():
     while running:                  #ak bezi tak sa pozre ci nahodou neni niekde beziaci pygame event
         for e in p.event.get():     #ak je niekde event, tak ho vypne
             if e.type == p.QUIT:    #ak je to quit event, tak sa ukonci
-                running = False     
+                running = False
+            #myska
             elif e.type == p.MOUSEBUTTONDOWN:
                 location = p.mouse.get_pos()  #ziskaj x,y poziciu mysi
                 row = location[1] // SQ_SIZE     #zistime ktory riadok
@@ -53,6 +54,11 @@ def main():
                     gs.makeMove(move)
                     sqSelected = ()     #reset uzivateloveho kliku
                     playerClicks = []
+            
+            #klavesnica
+            elif e.type == p.KEYDOWN:
+                if e.key == p.K_z: #krok spat ked stlacim z
+                    gs.undoMoves() 
 
 
         draw_game_state(screen, gs) #vykreslime stav hry

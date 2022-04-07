@@ -21,13 +21,20 @@ class GameState():
         self.whiteToMove = True
         self.moveLog = []
 
-    
+    #zobere pohyb ako parameter a pusti ho (proste funkcia na pohyb)
     def makeMove(self, move):
         self.board[move.startRow][move.startCol] = "--"
         self.board[move.endRow][move.endCol] = move.pieceMoved
         self.moveLog.append(move) #log the move, takze vieme dat naspat (neskor)
         self.whiteToMove = not self.whiteToMove #prehodime hracov
-
+    
+    #funkcia na vratenie pohybu spat
+    def undoMoves(self):
+        if len(self.moveLog) != 0:          #ujistim sa ze tam nieco je
+            move = self.moveLog.pop()      #pop je funkcia ktora zobere poslednu vec v liste a otoci ju
+            self.board[move.startRow][move.startCol] = move.pieceMoved
+            self.board[move.endRow][move.endCol] = move.pieceCaputer
+            self.whiteToMove = not self.whiteToMove #prehodi na cierneho
 
 class Move():            
     #MAPA KLUCOV K HODNOTAM
