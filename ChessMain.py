@@ -48,7 +48,7 @@ def main():
                     sqSelected = (row, col)         #zapiseme do tuple
                     playerClicks.append(sqSelected) #zapiseme do zoznamu
                 if len(playerClicks) == 2:          #po druhom kliku
-
+                    pass ############
 
         draw_game_state(screen, gs) #vykreslime stav hry
         clock.tick(MAX_FPS)         #nastavime fps
