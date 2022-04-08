@@ -36,6 +36,15 @@ class GameState():
             self.board[move.endRow][move.endCol] = move.pieceCaputer
             self.whiteToMove = not self.whiteToMove #prehodi na cierneho
 
+    #vsetky tahy s ohladom na kontrolu
+    def getValiddMoves(self):
+        pass
+    
+    #vsetky tahy bezohladom na kontrolu
+    def allMoves(self):
+        pass
+
+
 class Move():            
     #MAPA KLUCOV K HODNOTAM
     #pomocou tohto mapy sa daje zistit ci je mozne tahnutie na poziciu
