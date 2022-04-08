@@ -28,11 +28,14 @@ def main():
     clock = p.time.Clock()
     screen.fill(p.Color("white"))
     gs = ChessEngine.GameState() #vytvorime instanciu hry, gs = game state
+    validMoves = gs.getValiddMoves()
+    moveMade = False            #flag var, ked sa vykona pohyb
     load_images()               #nacitame obrzky, robime to iba raz!!!  
     running = True              #bezime? bezime!
     sqSelected =  ()            #toto je tuple, kde bude ukladat poziciu kliknutia, od zaiatku je pozicia prazdna,
                                 # (tuple(row,col))
     playerClicks = []           # tu bude ukladat kliknutia, ktore bude hrac zadavat 
+
     while running:                  #ak bezi tak sa pozre ci nahodou neni niekde beziaci pygame event
         for e in p.event.get():     #ak je niekde event, tak ho vypne
             if e.type == p.QUIT:    #ak je to quit event, tak sa ukonci
@@ -51,15 +54,21 @@ def main():
                 if len(playerClicks) == 2:          #po druhom kliku
                     move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board) #bere si prvu poziciu, poslednu a board
                     print(move.getChessNotation())
-                    gs.makeMove(move)
+                    if move in validMoves:
+                        gs.makeMove(move)
+                        moveMade = True
                     sqSelected = ()     #reset uzivateloveho kliku
                     playerClicks = []
             
             #klavesnica
             elif e.type == p.KEYDOWN:
                 if e.key == p.K_z: #krok spat ked stlacim z
-                    gs.undoMoves() 
-
+                    gs.undoMoves()
+                    moveMade = True
+                    
+        if moveMade:
+            validMoves = gs.getValiddMoves()
+            moveMade = False
         draw_game_state(screen, gs) #vykreslime stav hry
         clock.tick(MAX_FPS)         #nastavime fps
         p.display.flip()            #vykresli hru 

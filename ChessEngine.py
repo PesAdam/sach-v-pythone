@@ -38,12 +38,30 @@ class GameState():
 
     #vsetky tahy s ohladom na kontrolu
     def getValiddMoves(self):
-        pass
+        return self.allMoves()
     
     #vsetky tahy bezohladom na kontrolu
     def allMoves(self):
+        moves = [Move((6,4), (4,4), self.board)]
+        for r in range(len(self.board)):        #pocet riadkov
+            for c in range(len(self.board[r])): #pocet stplcov
+                turn = self.board[r][c][0]
+                if (turn == 'w' and self.whiteToMove) and (turn == 'b' and not self.whiteToMove):
+                    piece = self.board[r][c][1]
+                    if piece == 'p':            #ak je to pesiak
+                        self.getPawnMoves(r, c, moves)
+                    elif piece == 'R':
+                        self.getRookMoves(r,c,moves)
+        return moves
+
+    #def 
+    #funkcia pre pesiakov, ziska vsetky moze pohyby pre nich
+    def getPawnMoves(self, r,c,moves):
         pass
 
+
+    def getRookMoves(self, r,c, moves):
+        pass
 
 class Move():            
     #MAPA KLUCOV K HODNOTAM
@@ -64,6 +82,15 @@ class Move():
 
         self.pieceMoved = board[self.startRow][self.startCol]   #tu bude figurka ktoru bude menit
         self.pieceCaputer = board[self.endRow][self.endCol]     #tu bude ukladat co sa vyhodilo
+        self.moveID = self.startRow * 1000 + self.startCol * 100 + self.endRow * 10 + self.endCol
+        print(self.moveID)
+
+    #overriding the equals methods
+    def __eq__(self, other):
+        if isinstance(other, Move):
+            return self.moveID == other.moveID
+        return False
+
 
     def getChessNotation(self):
         return self.getRankFile(self.startRow, self.startCol) + self.getRankFile(self.endRow, self.endCol);
