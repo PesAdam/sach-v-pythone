@@ -13,7 +13,7 @@ class GameState():
             ["--","--","--","--","--","--","--","--"],
             ["--","--","--","--","--","--","--","--"],
             ["--","--","--","--","--","--","--","--"],
-            ["--","--","--","bp","--","--","--","--"],
+            ["--","--","--","--","--","--","--","--"],
             ["wp","wp","wp","wp","wp","wp","wp","wp"],
             ["wR","wN","wB","wQ","wK","wB","wN","wR"]
         ]
@@ -62,6 +62,7 @@ class GameState():
                 moves.append(Move((r, c), (r-1, c), self.board))
                 if r == 6 and self.board[r-2][c] == "--": #2 stvorceky dopredu
                     moves.append(Move((r,c), (r-2,c), self.board)) 
+
             if c-1 >= 0:                            #lava strana
                 if self.board[r-1][c-1][0] == 'b':  #ak je tam enemy cierny
                     moves.append(Move((r, c), (r-1,c-1), self.board))
@@ -70,10 +71,20 @@ class GameState():
                     moves.append(Move((r, c), (r-1, c+1), self.board))
 
         else:
-            if self.board[]
-
-
-
+            #black pawns
+            if self.board[r+1][c] == "--":  #ak je prednim przdno
+                moves.append(Move((r, c), (r+1, c), self.board))    #jeden krok vpred
+                
+                if r == 1 and self.board[r+2][c] == "--":
+                    moves.append(Move((r,c), (r+2,c), self.board))  #dva pred
+            
+            if c-1 >= 0:
+                if self.board[r+1][c-1][0] == 'w':                      #lava strana
+                    moves.append(Move((r,c), (r-1, c+1), self.board))
+            if c+1 <= 7:
+                if self.board[r+1][c+1][0] == 'w':                      #prava strana
+                    moves.append(Move((r,c), (r+1, c+1), self.board))
+        
     def getRookMoves(self, r,c, moves):
         pass
 
