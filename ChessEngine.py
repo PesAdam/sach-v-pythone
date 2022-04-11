@@ -74,7 +74,6 @@ class GameState():
             #black pawns
             if self.board[r+1][c] == "--":  #ak je prednim przdno
                 moves.append(Move((r, c), (r+1, c), self.board))    #jeden krok vpred
-                
                 if r == 1 and self.board[r+2][c] == "--":
                     moves.append(Move((r,c), (r+2,c), self.board))  #dva pred
             
@@ -86,7 +85,25 @@ class GameState():
                     moves.append(Move((r,c), (r+1, c+1), self.board))
         
     def getRookMoves(self, r,c, moves):
-        pass
+        direction = ((-1,0), (1,0) , (0,1), (0,-1))             #vsetky smery kam moze veza ist
+        enemy = 'b' if self.whiteToMove else 'w'                #enemy je cierny #noracism
+        for d in direction:                                     #pre direct v direction
+            for i in range(1, 8):                               #pole je 8x8 preto pre vsetko v poli
+                endRow = r + d[0] * i                           #posledny riadok
+                endCol = c + d[1] * i                           #posledny stplec
+                if 0 <= endRow < 8 and 0 <= endCol < 8:         #ak 0 je viac ako posledny riadok a neni menej ako 8 a to iste aj so stlpcami
+                    endPiece = self.board[endRow][endCol]       #posledny
+                    if endPiece == "--":                        #ak je posledny prazdne pole
+                        moves.append(                           #urob pohyb
+                            Move((r, c), (endRow, endCol), self.board))
+                    elif endPiece[0] == enemy:                  #ak je to enemy tak ho zabi
+                        moves.append(
+                            Move((r, c), (endRow, endCol), self.board))
+                        break
+                    else:
+                        break
+                else:
+                    break
 
 class Move():            
     #MAPA KLUCOV K HODNOTAM
