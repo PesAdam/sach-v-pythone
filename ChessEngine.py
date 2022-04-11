@@ -84,6 +84,7 @@ class GameState():
                 if self.board[r+1][c+1][0] == 'w':                      #prava strana
                     moves.append(Move((r,c), (r+1, c+1), self.board))
         
+    #veza
     def getRookMoves(self, r,c, moves):
         direction = ((-1,0), (1,0) , (0,1), (0,-1))             #vsetky smery kam moze veza ist
         enemy = 'b' if self.whiteToMove else 'w'                #enemy je cierny #noracism
@@ -105,6 +106,31 @@ class GameState():
                 else:
                     break
 
+    #kon
+    def getKnightMoves(self, r, c, moves):
+        direction = ((-2, -1), (-2, 1), (-1, -2), (-1, 2),
+                    (1, -2), (1, 2), (2, -1), (2, 1))
+        enemy = 'b' if self.whiteToMove else 'w'
+        for d in direction:
+            endRow = r + d[0]                           #posledny riadok
+            endCol = c + d[1] 
+            if 0 <= endRow < 8 and 0 <= endCol < 8:
+                endPiece = self.board[endRow][endCol]
+                if endPiece[0] != enemy:
+                    moves.append(Move((r, c), (endRow, endCol), self.board))  
+
+    #strelec
+    def getBishopMoves(self, r, c, moves):
+        pass
+
+    #kralovna
+    def getQueenMoves(self, r, c, moves):
+        pass
+    
+    #kral
+    def getKingMoves(self, r, c, moves):
+        pass
+    
 class Move():            
     #MAPA KLUCOV K HODNOTAM
     #pomocou tohto mapy sa daje zistit ci je mozne tahnutie na poziciu
