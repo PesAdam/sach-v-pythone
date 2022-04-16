@@ -20,6 +20,8 @@ class GameState():
 
         self.whiteToMove = True
         self.moveLog = []
+        self.whiteKingLocation = (7,4)  #pozicia krala bielych
+        self.blackKingLocation = (0,4)  #pozicia krala ciernych
 
     #zobere pohyb ako parameter a pusti ho (proste funkcia na pohyb)
     def makeMove(self, move):
@@ -27,6 +29,11 @@ class GameState():
         self.board[move.endRow][move.endCol] = move.pieceMoved
         self.moveLog.append(move) #log the move, takze vieme dat naspat (neskor)
         self.whiteToMove = not self.whiteToMove #prehodime hracov
+        #pozreme sa ci sa kral pohol
+        if move.pieceMoved == 'wK':
+            self.whiteKingLocation = (move.endRow, move.endCol)
+        elif move.pieceMoved == 'bK':
+            self.blackKingLocation = (move.endRow, move.endCol)
     
     #funkcia na vratenie pohybu spat
     def undoMoves(self):
@@ -35,11 +42,49 @@ class GameState():
             self.board[move.startRow][move.startCol] = move.pieceMoved
             self.board[move.endRow][move.endCol] = move.pieceCaputer
             self.whiteToMove = not self.whiteToMove #prehodi na cierneho
+            #update king pozicia
+            if move.pieceMoved == 'wK':
+                self.whiteKingLocation = (move.startRow, move.startCol)
+            elif move.pieceMoved == 'bK':
+                self.blackKingLocation = (move.startRow, move.startCol)
 
     #vsetky tahy s ohladom na kontrolu
-    def getValiddMoves(self):
-        return self.allMoves()
-    
+    def getValidMoves(self):
+        #1.) gerenujem vsetky mozne tahy
+        moves = self.allMoves()
+        #2.) pre kazdy tah, urobim tah
+        for i in range(len(moves)-1, -1, -1): #ked vymazavam z listu tak chod zo zadu toho listu
+            self.makeMove(moves[i])
+            
+        #3.) generujem vsetky protihracove tahy
+        #4.) pre kazdy protihracov tah, pozeram ci vie zautocit na krala
+        self.whiteToMove = not self.whiteToMove                                 #switch
+        if self.inCheck():
+            moves.remove(moves[i])                                       #5.) ak ano, tento tah nieje validny
+        self.whiteToMove = not self.whiteToMove
+        self.undoMoves()
+
+
+        return moves
+
+    #zisti ci je hrac v sachu
+    def inCheck(self):
+        if self.whiteToMove:
+            return self.squareUnderAttack(self.whiteKingLocation[0], self.whiteKingLocation[1])
+        else:
+            return self.squareUnderAttack(self.blackKingLocation[0], self.blackKingLocation[1])
+
+    #zisti ci enemy moze zautocit na krala
+    def squareUnderAttack(self, r, c):
+        self.whiteToMove = not self.whiteToMove #switch 
+        oppMoves = self.allMoves()
+        self.whiteToMove = not self.whiteToMove #switch back
+        for move in oppMoves:
+            if move.endRow == r and move.endCol == c:       #stvorec je pod utokom
+                self.whiteToMove = not self.whiteToMove     #switch 
+            return True
+        return False
+
     #vsetky tahy bezohladom na kontrolu
     def allMoves(self):
         moves = []
