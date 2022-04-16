@@ -52,6 +52,14 @@ class GameState():
                         self.getPawnMoves(r, c, moves)
                     elif piece == 'R':
                         self.getRookMoves(r,c,moves)
+                    elif piece == 'N':
+                        self.getKingMoves(r,c,moves)
+                    elif piece == 'B':
+                        self.getBishopMoves(r,c,moves)
+                    elif piece == 'Q':
+                        self.getQueenMoves(r,c,moves)
+                    elif piece == 'K':
+                        self.getKingMoves(r,c,moves)
         return moves
 
     #def 
@@ -86,10 +94,10 @@ class GameState():
         
     #veza
     def getRookMoves(self, r,c, moves):
-        direction = ((-1,0), (1,0) , (0,1), (0,-1))             #vsetky smery kam moze veza ist
+        direction = ((-1,0), (1,0) , (0,1), (0,-1))             #vsetky smery kam moze veza ist, up, left, down, right
         enemy = 'b' if self.whiteToMove else 'w'                #enemy je cierny #noracism
         for d in direction:                                     #pre direct v direction
-            for i in range(1, 8):                               #pole je 8x8 preto pre vsetko v poli
+            for i in range(1, 8):                               #moze tiez chodit 7 policok
                 endRow = r + d[0] * i                           #posledny riadok
                 endCol = c + d[1] * i                           #posledny stplec
                 if 0 <= endRow < 8 and 0 <= endCol < 8:         #ak 0 je viac ako posledny riadok a neni menej ako 8 a to iste aj so stlpcami
@@ -101,9 +109,9 @@ class GameState():
                         moves.append(
                             Move((r, c), (endRow, endCol), self.board))
                         break
-                    else:
+                    else:                                       #ak je to kamos tak ukonci
                         break
-                else:
+                else:                                           #ak je mimo pola
                     break
 
     #kon
@@ -112,7 +120,7 @@ class GameState():
                     (1, -2), (1, 2), (2, -1), (2, 1))
         enemy = 'b' if self.whiteToMove else 'w'
         for d in direction:
-            endRow = r + d[0]                           #posledny riadok
+            endRow = r + d[0]                           
             endCol = c + d[1] 
             if 0 <= endRow < 8 and 0 <= endCol < 8:
                 endPiece = self.board[endRow][endCol]
@@ -121,15 +129,55 @@ class GameState():
 
     #strelec
     def getBishopMoves(self, r, c, moves):
-        pass
+        direction = ((-1, -1), (-1, 1), (1, -1), (1, 1))                #vsetky smery kam moze strelec ist, up, left, down, right
+        enemy = 'b' if self.whiteToMove else 'w'                        #enemy je cierny ak je na rade biela tak sa prehodia  
+        for d in direction:                                             #pre direct v direction
+            for i in range(1, 8):                                       #moze ist maximalne 7 policok
+                endRow = r + d[0] * i                                   #posledny riadok
+                endCol = c + d[1] * i                                   #posledny stplec
+                if 0 <= endRow < 8 and 0 <= endCol < 8:                 #ak 0 je viac ako posledny riadok a neni menej ako 8 a to iste aj so stlpcami
+                    endPiece = self.board[endRow][endCol]               #posledny
+                    if endPiece == "--":                                #ak je posledny prazdne pole
+                        moves.append(Move((r, c), (endRow, endCol), self.board))  #urob pohyb
+                    elif endPiece[0] == enemy:                          #ak je to enemy tak ho zabi
+                        moves.append(Move((r, c), (endRow, endCol), self.board)) #urob pohyb
+                        break                                   #ukonci
+                    else:                                       #ak je to kamos tak ukonci
+                        break
+                else:                                           #ak je mimo pola
+                    break       
 
     #kralovna
     def getQueenMoves(self, r, c, moves):
-        pass
+        direction = ((-1, -1), (-1, 1), (1, -1), (1, 1),
+                    (-1, 0), (1, 0), (0, -1), (0, 1))
+        enemy = 'b' if self.whiteToMove else 'w'
+        for d in direction:
+            for i in range(1, 8):
+                endRow = r + d[0] * i                           #posledny riadok
+                endCol = c + d[1] * i                           #posledny stplec
+                if 0 <= endRow < 8 and 0 <= endCol < 8:         #ak 0 je viac ako posledny riadok a neni menej ako 8 a to iste aj so stlpcami
+                    endPiece = self.board[endRow][endCol]       #posledny
+                    if endPiece == "--":                        #ak je posledny prazdne pole
+                        moves.append(Move((r, c), (endRow, endCol), self.board))
     
     #kral
     def getKingMoves(self, r, c, moves):
-        pass
+        direction = ((-1, -1), (-1, 1), (1, -1), (1, 1),
+                    (-1, 0), (1, 0), (0, -1), (0, 1))
+        enemy = 'b' if self.whiteToMove else 'w'
+        for d in direction:
+            endRow = r + d[0]                           #posledny riadok
+            endCol = c + d[1] 
+            if 0 <= endRow < 8 and 0 <= endCol < 8:
+                endPiece = self.board[endRow][endCol]
+                if endPiece == "--":
+                    moves.append(Move((r, c), (endRow, endCol), self.board))
+                elif endPiece[0] == enemy:
+                    moves.append(Move((r, c), (endRow, endCol), self.board))
+                    break
+                else:
+                    break
     
 class Move():            
     #MAPA KLUCOV K HODNOTAM
@@ -150,7 +198,7 @@ class Move():
 
         self.pieceMoved = board[self.startRow][self.startCol]   #tu bude figurka ktoru bude menit
         self.pieceCaputer = board[self.endRow][self.endCol]     #tu bude ukladat co sa vyhodilo
-        self.moveID = self.startRow * 1000 + self.startCol * 10000 + self.endRow / 10 + self.endCol
+        self.moveID = self.startRow * 1000 + self.startCol * 100 + self.endRow / 10 + self.endCol
         print(self.moveID)
 
     #overriding the equals methods
@@ -161,7 +209,7 @@ class Move():
 
 
     def getChessNotation(self):
-        return self.getRankFile(self.startRow, self.startCol) + self.getRankFile(self.endRow, self.endCol);
+        return self.getRankFile(self.startRow, self.startCol) + self.getRankFile(self.endRow, self.endCol)
 
     def getRankFile(self, r, c):
         return self.colsToFiles[c] + self.rowsToRanks[r]
