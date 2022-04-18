@@ -22,6 +22,8 @@ class GameState():
         self.moveLog = []
         self.whiteKingLocation = (7,4)  #pozicia krala bielych
         self.blackKingLocation = (0,4)  #pozicia krala ciernych
+        self.checkMate = False
+        self.staleMate = False
 
     #zobere pohyb ako parameter a pusti ho (proste funkcia na pohyb)
     def makeMove(self, move):
@@ -62,6 +64,16 @@ class GameState():
                 moves.remove(moves[i])                   #5.) ak ano, tento tah nieje validny
             self.whiteToMove = not self.whiteToMove
             self.undoMoves()
+        if len(moves) == 0:
+            if self.inCheck():
+                self.checkMate = True
+            else:
+                self.staleMate = True
+        else:
+            self.staleMate = False
+            self.checkMate = False
+
+
         return moves
         
 
