@@ -23,12 +23,11 @@ def load_images():
 
 #main kusok kodu, bude sa zaoberat user inputom a updatovanim hry
 def main():
-    
     screen = p.display.set_mode((WIDTH, HEIGHT))
     clock = p.time.Clock()
     screen.fill(p.Color("white"))
     gs = ChessEngine.GameState() #vytvorime instanciu hry, gs = game state
-    validMoves = gs.getValiddMoves()
+    validMoves = gs.getValidMoves()
     moveMade = False            #flag var, ked sa vykona pohyb
     load_images()               #nacitame obrzky, robime to iba raz!!!  
     running = True              #bezime? bezime!
@@ -67,7 +66,7 @@ def main():
                     moveMade = True
                     
         if moveMade:
-            validMoves = gs.getValiddMoves()
+            validMoves = gs.getValidMoves()
             moveMade = False
         draw_game_state(screen, gs) #vykreslime stav hry
         clock.tick(MAX_FPS)         #nastavime fps

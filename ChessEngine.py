@@ -34,7 +34,7 @@ class GameState():
             self.whiteKingLocation = (move.endRow, move.endCol)
         elif move.pieceMoved == 'bK':
             self.blackKingLocation = (move.endRow, move.endCol)
-    
+        
     #funkcia na vratenie pohybu spat
     def undoMoves(self):
         if len(self.moveLog) != 0:          #ujistim sa ze tam nieco je
@@ -55,17 +55,15 @@ class GameState():
         #2.) pre kazdy tah, urobim tah
         for i in range(len(moves)-1, -1, -1): #ked vymazavam z listu tak chod zo zadu toho listu
             self.makeMove(moves[i])
-            
-        #3.) generujem vsetky protihracove tahy
-        #4.) pre kazdy protihracov tah, pozeram ci vie zautocit na krala
-        self.whiteToMove = not self.whiteToMove                                 #switch
-        if self.inCheck():
-            moves.remove(moves[i])                                       #5.) ak ano, tento tah nieje validny
-        self.whiteToMove = not self.whiteToMove
-        self.undoMoves()
-
-
+            #3.) generujem vsetky protihracove tahy
+            #4.) pre kazdy protihracov tah, pozeram ci vie zautocit na krala
+            self.whiteToMove = not self.whiteToMove                                 #switch
+            if self.inCheck():
+                moves.remove(moves[i])                   #5.) ak ano, tento tah nieje validny
+            self.whiteToMove = not self.whiteToMove
+            self.undoMoves()
         return moves
+        
 
     #zisti ci je hrac v sachu
     def inCheck(self):
@@ -80,9 +78,8 @@ class GameState():
         oppMoves = self.allMoves()
         self.whiteToMove = not self.whiteToMove #switch back
         for move in oppMoves:
-            if move.endRow == r and move.endCol == c:       #stvorec je pod utokom
-                self.whiteToMove = not self.whiteToMove     #switch 
-            return True
+            if move.endRow == r and move.endCol == c:       #stvorec je pod utokom 
+                return True
         return False
 
     #vsetky tahy bezohladom na kontrolu
