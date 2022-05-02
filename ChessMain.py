@@ -1,5 +1,6 @@
 # main file, ma na starosti user input a zobrazovanie aktualneho stavu hry
 
+from cgitb import text
 import pygame as p
 import ChessEngine
 
@@ -34,6 +35,7 @@ def main():
     sqSelected =  ()            #toto je tuple, kde bude ukladat poziciu kliknutia, od zaiatku je pozicia prazdna,
                                 # (tuple(row,col))
     playerClicks = []           # tu bude ukladat kliknutia, ktore bude hrac zadavat 
+    gameOver = False
 
     while running:                  #ak bezi tak sa pozre ci nahodou neni niekde beziaci pygame event
         for e in p.event.get():     #ak je niekde event, tak ho vypne
@@ -41,23 +43,24 @@ def main():
                 running = False
             #myska
             elif e.type == p.MOUSEBUTTONDOWN:
-                location = p.mouse.get_pos()  #ziskaj x,y poziciu mysi
-                row = location[1] // SQ_SIZE     #zistime ktory riadok
-                col = location[0] // SQ_SIZE     #zistime ktory stlpec
-                if sqSelected == (row, col):    #ak je kliknutie na rovnaku poziciu, tak sa odstrani zoznam
-                    sqSelected = ()
-                    playerClicks = []
-                else:
-                    sqSelected = (row, col)         #zapiseme do tuple
-                    playerClicks.append(sqSelected) #zapiseme do zoznamu
-                if len(playerClicks) == 2:          #po druhom kliku
-                    move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board) #bere si prvu poziciu, poslednu a board
-                    print(move.getChessNotation())
-                    if move in validMoves:
-                        gs.makeMove(move)
-                        moveMade = True
-                    sqSelected = ()     #reset uzivateloveho kliku
-                    playerClicks = []
+                if not gameOver:
+                    location = p.mouse.get_pos()  #ziskaj x,y poziciu mysi
+                    row = location[1] // SQ_SIZE     #zistime ktory riadok
+                    col = location[0] // SQ_SIZE     #zistime ktory stlpec
+                    if sqSelected == (row, col):    #ak je kliknutie na rovnaku poziciu, tak sa odstrani zoznam
+                        sqSelected = ()
+                        playerClicks = []
+                    else:
+                        sqSelected = (row, col)         #zapiseme do tuple
+                        playerClicks.append(sqSelected) #zapiseme do zoznamu
+                    if len(playerClicks) == 2:          #po druhom kliku
+                        move = ChessEngine.Move(playerClicks[0], playerClicks[1], gs.board) #bere si prvu poziciu, poslednu a board
+                        print(move.getChessNotation())
+                        if move in validMoves:
+                            gs.makeMove(move)
+                            moveMade = True
+                        sqSelected = ()     #reset uzivateloveho kliku
+                        playerClicks = []
             
             #klavesnica
             elif e.type == p.KEYDOWN:
@@ -69,6 +72,17 @@ def main():
             validMoves = gs.getValidMoves()
             moveMade = False
         draw_game_state(screen, gs, validMoves, sqSelected) #vykreslime stav hry
+        
+        if gs.checkMate:
+            gameOver = True
+            if gs.whiteToMove:
+                drawText(screen, 'cierna vyhrala')
+            else:
+                drawText(screen, 'biela vyhrala')
+        elif gs.staleMate:
+            gameOver = True
+            drawText(screen, 'Koniec hry')
+
         clock.tick(MAX_FPS)         #nastavime fps
         p.display.flip()            #vykresli hru 
 
@@ -111,6 +125,12 @@ def drawPieces(screen, board):
             piece = board[r][c]
             if piece != "--":                                                                   #ak je tam nejaka figurka
                 screen.blit(IMAGES[piece], p.Rect(c * SQ_SIZE, r * SQ_SIZE, SQ_SIZE, SQ_SIZE))  #vykreslime ju
+
+def drawText(screen):
+    font = p.font.SysFont("Helvitca", 32, True, False)
+    textObject = font.render(text, 0, p.Color('Black'))
+    textLocation = p.Rect(0,0, WIDTH, HEIGHT).move(WIDTH/2 - textObject.get_width()/2, HEIGHT / 2 - textObject.get_height() / 2) #vzorec aby bol text vzdy v strede
+    screen.blit(textObject, textLocation)
 
 
 if __name__ == "__main__":

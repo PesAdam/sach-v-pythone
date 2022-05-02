@@ -107,7 +107,7 @@ class GameState():
                     elif piece == 'R':
                         self.getRookMoves(r,c,moves)
                     elif piece == 'N':
-                        self.getKingMoves(r,c,moves)
+                        self.getKnightMoves(r,c,moves)
                     elif piece == 'B':
                         self.getBishopMoves(r,c,moves)
                     elif piece == 'Q':
