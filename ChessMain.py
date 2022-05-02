@@ -68,15 +68,32 @@ def main():
         if moveMade:
             validMoves = gs.getValidMoves()
             moveMade = False
-        draw_game_state(screen, gs) #vykreslime stav hry
+        draw_game_state(screen, gs, validMoves, sqSelected) #vykreslime stav hry
         clock.tick(MAX_FPS)         #nastavime fps
         p.display.flip()            #vykresli hru 
 
+#bude vyznacovat poziciu kliknutia a kam sa moze panacik posunut
+def highlightSquare(screen, gs, validMoves, sqSelected):
+    if sqSelected != ():
+        r, c = sqSelected
+        if gs.board[r][c][0] == ('w' if gs.whiteToMove else 'b'):       #sqSelected je figurka ktorou sa mozem pohnut
+            #highlight vybraneho stvorca
+            s = p.Surface((SQ_SIZE, SQ_SIZE))
+            s.set_alpha(50)  #prehliadnost
+            s.fill(p.Color('green'))
+            screen.blit(s, (c*SQ_SIZE, r*SQ_SIZE))
+            #highlight pohybu
+            s.fill(p.Color('yellow'))
+            for move in validMoves:
+                if move.startRow == r and move.startCol == c:
+                    screen.blit(s, (move.endCol*SQ_SIZE, move.endRow*SQ_SIZE))
+
 #Zodpovedna za vsetky kreslenia
 
-def draw_game_state(screen, gs):
+def draw_game_state(screen, gs, validMoves, sqSelected):
     drawBoard(screen)               #nakreslime hraciu plochu
     drawPieces(screen, gs.board)    #nakreslime figurky
+    highlightSquare(screen, gs, validMoves, sqSelected)
 
 
 def drawBoard(screen):
