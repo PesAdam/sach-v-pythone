@@ -9,12 +9,12 @@ class GameState():
         # "--" reprezentuje prazdnu poziciu
         self.board = [
             ["bR","bN","bB","bQ","bK","bB","bN","bR"],
-            ["bp","bp","bp","bp","bp","bp","bp","bp"],
+            ["bp","bp","bp","bp","--","bp","bp","bp"],
             ["--","--","--","--","--","--","--","--"],
-            ["--","--","--","--","--","--","--","--"],
-            ["--","--","--","--","--","--","--","--"],
-            ["--","--","--","--","--","--","--","--"],
-            ["wp","wp","wp","wp","wp","wp","wp","wp"],
+            ["--","--","--","--","bp","--","--","--"],
+            ["--","--","--","--","--","--","wp","--"],
+            ["--","--","--","--","--","wp","--","--"],
+            ["wp","wp","wp","wp","wp","--","--","wp"],
             ["wR","wN","wB","wQ","wK","wB","wN","wR"]
         ]
 
@@ -171,7 +171,7 @@ class GameState():
 
     #kon
     def getKnightMoves(self, r, c, moves):
-        direction = ((-2, -1), (-2, 1), (-1, -2), (-1, 2),
+        direction = ((-2, -1), (-2, 1), (-1, -2), (-1, 2),      #up, left, down, right
                     (1, -2), (1, 2), (2, -1), (2, 1))
         enemy = 'b' if self.whiteToMove else 'w'
         for d in direction:
@@ -180,7 +180,10 @@ class GameState():
             if 0 <= endRow < 8 and 0 <= endCol < 8:
                 endPiece = self.board[endRow][endCol]
                 if endPiece[0] != enemy:
-                    moves.append(Move((r, c), (endRow, endCol), self.board))  
+                    if endPiece == "--":
+                        moves.append(Move((r,c), (endRow, endCol), self.board))
+                    elif endPiece[0] == enemy:
+                        moves.append(Move((r, c), (endRow, endCol), self.board))  
 
     #strelec
     def getBishopMoves(self, r, c, moves):
