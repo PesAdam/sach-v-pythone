@@ -126,11 +126,12 @@ def drawPieces(screen, board):
             if piece != "--":                                                                   #ak je tam nejaka figurka
                 screen.blit(IMAGES[piece], p.Rect(c * SQ_SIZE, r * SQ_SIZE, SQ_SIZE, SQ_SIZE))  #vykreslime ju
 
-def drawText(screen):
+def drawText(screen, text):
     font = p.font.SysFont("Helvitca", 32, True, False)
     textObject = font.render(text, 0, p.Color('Black'))
     textLocation = p.Rect(0,0, WIDTH, HEIGHT).move(WIDTH/2 - textObject.get_width()/2, HEIGHT / 2 - textObject.get_height() / 2) #vzorec aby bol text vzdy v strede
     screen.blit(textObject, textLocation)
+    
 
 
 if __name__ == "__main__":
