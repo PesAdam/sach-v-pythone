@@ -55,7 +55,7 @@ class GameState():
         #1.) gerenujem vsetky mozne tahy
         moves = self.allMoves()
         #2.) pre kazdy tah, urobim tah
-        for i in range(len(moves)-1, -1, -1): #ked vymazavam z listu tak chod zo zadu toho listu
+        for i in range(len(moves)-1, -1,-1): #ked vymazavam z listu tak chod zo zadu toho listu
             self.makeMove(moves[i])
             #3.) generujem vsetky protihracove tahy
             #4.) pre kazdy protihracov tah, pozeram ci vie zautocit na krala
@@ -97,6 +97,7 @@ class GameState():
     #vsetky tahy bezohladom na kontrolu
     def allMoves(self):
         moves = []
+        print(moves)
         for r in range(len(self.board)):        #pocet riadkov
             for c in range(len(self.board[r])): #pocet stplcov
                 turn = self.board[r][c][0]
@@ -214,6 +215,11 @@ class GameState():
                     endPiece = self.board[endRow][endCol]       #posledny
                     if endPiece == "--":                        #ak je posledny prazdne pole
                         moves.append(Move((r, c), (endRow, endCol), self.board))
+                    elif endPiece[0] == enemy:
+                        moves.append(Move((r,c), (endRow, endCol), self.board))
+                        break
+                    else:
+                        break
     
     #kral
     def getKingMoves(self, r, c, moves):
@@ -253,7 +259,7 @@ class Move():
         self.pieceMoved = board[self.startRow][self.startCol]   #tu bude figurka ktoru bude menit
         self.pieceCaputer = board[self.endRow][self.endCol]     #tu bude ukladat co sa vyhodilo
         self.moveID = self.startRow * 1000 + self.startCol * 100 + self.endRow / 10 + self.endCol
-        print(self.moveID)
+        #print(self.moveID)
 
     #overriding the equals methods
     def __eq__(self, other):
