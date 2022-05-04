@@ -97,7 +97,7 @@ class GameState():
     #vsetky tahy bezohladom na kontrolu
     def allMoves(self):
         moves = []
-        print(moves)
+        print
         for r in range(len(self.board)):        #pocet riadkov
             for c in range(len(self.board[r])): #pocet stplcov
                 turn = self.board[r][c][0]
