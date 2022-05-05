@@ -3,6 +3,7 @@
 
 class GameState():
     def __init__(self):
+        #init sluzi na inicializaciu vlastnosti tejto triedy
         #mozno pouzit numpy array neskor, pre rychlost
         #board je 8*8 a kazdy list ma 2 charakterov, prvy reprezentuje farbu b - black, w-white
         #druhy charakter prezentuje o aku figurku ide
@@ -12,7 +13,7 @@ class GameState():
             ["bp","bp","bp","bp","bp","bp","bp","bp"],
             ["--","--","--","--","--","--","--","--"],
             ["--","--","--","--","--","--","--","--"],
-            ["--","--","--","--","--","--","--","--"],
+            ["--","--","--","wK","--","--","--","--"],
             ["--","--","--","--","--","--","--","--"],
             ["wp","wp","wp","wp","wp","wp","wp","wp"],
             ["wR","wN","wB","wQ","wK","wB","wN","wR"]
@@ -61,7 +62,7 @@ class GameState():
             #4.) pre kazdy protihracov tah, pozeram ci vie zautocit na krala
             self.whiteToMove = not self.whiteToMove                                 #switch
             if self.inCheck():
-                moves.remove(moves[i])                   #5.) ak ano, tento tah nieje validny
+                moves.remove(moves[i])                            #5.) ak ano, tento tah nieje validny
             self.whiteToMove = not self.whiteToMove
             self.undoMoves()
         if len(moves) == 0:
@@ -84,20 +85,9 @@ class GameState():
         else:
             return self.squareUnderAttack(self.blackKingLocation[0], self.blackKingLocation[1])
 
-    #zisti ci enemy moze zautocit na krala
-    def squareUnderAttack(self, r, c):
-        self.whiteToMove = not self.whiteToMove #switch 
-        oppMoves = self.allMoves()
-        self.whiteToMove = not self.whiteToMove #switch back
-        for move in oppMoves:
-            if move.endRow == r and move.endCol == c:       #stvorec je pod utokom 
-                return True
-        return False
-
     #vsetky tahy bezohladom na kontrolu
     def allMoves(self):
         moves = []
-        print
         for r in range(len(self.board)):        #pocet riadkov
             for c in range(len(self.board[r])): #pocet stplcov
                 turn = self.board[r][c][0]
@@ -116,6 +106,17 @@ class GameState():
                     elif piece == 'K':
                         self.getKingMoves(r,c,moves)
         return moves
+
+
+    #zisti ci enemy moze zautocit na krala
+    def squareUnderAttack(self, r, c):
+        self.whiteToMove = not self.whiteToMove #switch 
+        oppMoves = self.allMoves()
+        self.whiteToMove = not self.whiteToMove #switch back
+        for move in oppMoves:
+            if move.endRow == r and move.endCol == c:       #stvorec je pod utokom 
+                return True
+        return False
 
     #def 
     #funkcia pre pesiakov, ziska vsetky moze pohyby pre nich
@@ -265,7 +266,7 @@ class Move():
         #print(self.moveID)
 
     #overriding the equals methods
-    def __eq__(self, other):
+    def __eq__(self, other):        #eq vracia rovnost
         if isinstance(other, Move):
             return self.moveID == other.moveID
         return False

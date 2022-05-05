@@ -1,6 +1,4 @@
 # main file, ma na starosti user input a zobrazovanie aktualneho stavu hry
-
-from cgitb import text
 import pygame as p
 import ChessEngine
 
